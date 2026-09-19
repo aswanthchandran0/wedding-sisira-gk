@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import song from '../assets/song.mp3'; // Adjust the path as needed
+import coverPageImage from '../assets/coverPageImage.jpeg'; // Adjust the path as needed
 
 const WeddingInvitation = () => {
   const ctaRef = useRef(null);
   const audioRef = useRef(null);
   const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -17,14 +18,14 @@ const WeddingInvitation = () => {
       const target = e.currentTarget;
       target.style.transform = 'scale(0.97)';
       setTimeout(() => { target.style.transform = ''; }, 180);
-      
+
       // Play the song
       if (audioRef.current) {
         audioRef.current.play().catch(error => {
           console.log('Audio play failed:', error);
         });
       }
-      
+
       // Navigate to invitation page
       navigate('/invitation');
     };
@@ -41,10 +42,9 @@ const WeddingInvitation = () => {
     const audio = audioRef.current;
     if (audio) {
       const handleAudioEnd = () => {
-        // Audio ended - you can add any cleanup here
         console.log('Song finished playing');
       };
-      
+
       audio.addEventListener('ended', handleAudioEnd);
       return () => {
         audio.removeEventListener('ended', handleAudioEnd);
@@ -56,13 +56,13 @@ const WeddingInvitation = () => {
     <div className="min-h-screen bg-white text-[#2E2A28] font-sans overflow-x-hidden antialiased">
       {/* Audio element */}
       <audio ref={audioRef} src={song} preload="auto" />
-      
+
       {/* HERO SECTION */}
       <section
         className="relative w-full h-[min(92vh,820px)] min-h-[560px] overflow-hidden bg-white"
-        aria-label="Wedding hero image"
+        aria-label="Wedding cover image"
       >
-        {/* Hero scene with SVG */}
+        {/* Hero image with reveal animation */}
         <div
           className="absolute inset-0 opacity-0 scale-[1.045]"
           style={{
@@ -72,59 +72,22 @@ const WeddingInvitation = () => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 62%, rgba(0,0,0,0.75) 78%, rgba(0,0,0,0.28) 90%, rgba(0,0,0,0) 100%)'
           }}
         >
-          <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice" className="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#F6E3C4"/>
-                <stop offset="38%" stopColor="#F3D9B8"/>
-                <stop offset="68%" stopColor="#F7E6C9"/>
-                <stop offset="100%" stopColor="#FFFFFF"/>
-              </linearGradient>
-              <radialGradient id="sun" cx="50%" cy="46%" r="50%">
-                <stop offset="0%" stopColor="#FFF6DE" stopOpacity="0.95"/>
-                <stop offset="45%" stopColor="#F7E7A9" stopOpacity="0.55"/>
-                <stop offset="100%" stopColor="#F7E7A9" stopOpacity="0"/>
-              </radialGradient>
-              <linearGradient id="groundFade" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#E9DAC0" stopOpacity="0.9"/>
-                <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0"/>
-              </linearGradient>
-            </defs>
-
-            <rect x="0" y="0" width="1200" height="800" fill="url(#sky)"/>
-            <circle cx="600" cy="360" r="360" fill="url(#sun)"/>
-            <circle cx="600" cy="380" r="86" fill="#FBF3DD" opacity="0.9"/>
-
-            {/* distant birds */}
-            <g stroke="#C9A55C" strokeWidth="3" fill="none" opacity="0.55" strokeLinecap="round">
-              <path d="M300 220 q10 -14 20 0 q10 -14 20 0"/>
-              <path d="M360 250 q8 -11 16 0 q8 -11 16 0"/>
-              <path d="M840 200 q10 -14 20 0 q10 -14 20 0"/>
-            </g>
-
-            {/* ground haze */}
-            <rect x="0" y="560" width="1200" height="240" fill="url(#groundFade)"/>
-
-            {/* couple silhouette, embracing, golden hour */}
-            <g transform="translate(600,560)" fill="#3B2F22" opacity="0.92">
-              {/* her gown */}
-              <path d="M-46,180 C-70,80 -58,-10 -30,-46 C-18,-60 2,-62 8,-48 C18,-24 20,60 8,150 C4,168 -2,180 -12,182 Z"/>
-              {/* her upper body & head */}
-              <ellipse cx="-14" cy="-70" rx="15" ry="18"/>
-              <path d="M-30,-52 C-22,-64 -4,-66 6,-56 C12,-50 12,-38 6,-30 L-24,-30 C-30,-38 -32,-46 -30,-52 Z"/>
-              {/* her arm reaching to him */}
-              <path d="M4,-34 C16,-26 26,-14 30,0 C32,8 26,12 20,6 C10,-6 2,-16 -4,-26 Z"/>
-
-              {/* him suit */}
-              <path d="M18,182 C10,120 8,20 22,-56 C28,-80 60,-84 70,-58 C86,-10 86,90 74,182 Z"/>
-              {/* his head */}
-              <ellipse cx="46" cy="-84" rx="16" ry="19"/>
-              <path d="M30,-62 C34,-76 58,-78 66,-64 C70,-56 68,-44 62,-38 L34,-38 C28,-46 27,-54 30,-62 Z"/>
-              {/* his arm around her */}
-              <path d="M24,-40 C10,-30 -2,-16 -8,0 C-11,8 -5,12 1,6 C12,-6 20,-18 30,-30 Z"/>
-            </g>
-          </svg>
+          <img
+            src={coverPageImage}
+            alt="Wedding cover — Sisira and Gautham"
+            className="w-full h-full object-cover object-center block"
+            draggable="false"
+          />
         </div>
+
+        {/* Soft warm overlay for elegance & text contrast */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(255,246,222,0.12) 0%, rgba(255,246,222,0.05) 40%, rgba(255,255,255,0.15) 70%, rgba(255,255,255,0.5) 100%)',
+            mixBlendMode: 'soft-light'
+          }}
+        />
 
         {/* Floating particles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -168,7 +131,7 @@ const WeddingInvitation = () => {
           }}
         />
 
-        {/* Fade overlay */}
+        {/* Fade overlay to blend into content */}
         <div
           className="absolute left-0 right-0 bottom-0 h-[46%] pointer-events-none"
           style={{
@@ -206,7 +169,7 @@ const WeddingInvitation = () => {
             <span className="h-px w-[46px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
           </div>
 
-          {/* COUPLE NAMES - Added here */}
+          {/* COUPLE NAMES */}
           <div
             className="mb-6"
             style={{
@@ -217,9 +180,9 @@ const WeddingInvitation = () => {
             }}
           >
             <h2 className="font-['Playfair_Display'] text-[clamp(32px,5vw,48px)] font-medium text-[#2E2A28] leading-[1.2]">
-              <span className="text-[#A9812C]">Gautham</span>
-              <span className="mx-4 text-[#D4AF37]">&</span>
               <span className="text-[#A9812C]">Sisira</span>
+              <span className="mx-4 text-[#D4AF37]">&</span>
+              <span className="text-[#A9812C]">Gautham</span>
             </h2>
             <p className="font-['Cormorant_Garamond'] italic text-[18px] text-[#8C8478] mt-1 tracking-[0.08em]">
               together with their families
