@@ -9,16 +9,12 @@ import gallary1 from '../assets/gallary1.jpeg';
 import gallary2 from '../assets/gallary2.png';
 import gallary3 from '../assets/gallary3.jpeg';
 import gallary4 from '../assets/gallary4.png';
-import gallary5 from '../assets/gallary5.jpeg'
-import gallary6 from '../assets/gallary6.jpeg'
 
 const galleryImages = [
   { id: 1, image: gallary1 },
   { id: 2, image: gallary2 },
   { id: 3, image: gallary4 },
   { id: 4, image: gallary3 },
-  // {id:  5, image:gallary5  },
-  // {id:  6, image:gallary6  }
 ];
 
 const InvitationScreen = () => {
@@ -39,6 +35,7 @@ const InvitationScreen = () => {
 
   const [isClicked, setIsClicked] = useState(false);
 
+  // ---- Refs for scroll animations ----
   const greetingsRef = useRef(null);
   const timerRef = useRef(null);
   const scheduleRef = useRef(null);
@@ -51,9 +48,10 @@ const InvitationScreen = () => {
   const reception2IntroRef = useRef(null);
   const reception2TimeRef = useRef(null);
   const galleryRef = useRef(null);
+  const closingRef = useRef(null);           // ← NEW
   const galleryImagesRef = useRef([]);
 
-  // Auto-play audio
+  // Auto-play audio when component mounts
   useEffect(() => {
     if (audioRef.current) {
       const fromCover = location.state?.fromCover || true;
@@ -79,7 +77,7 @@ const InvitationScreen = () => {
     }
   }, []);
 
-  // Timer
+  // Timer logic
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
@@ -101,7 +99,7 @@ const InvitationScreen = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Intersection Observer
+  // Intersection Observer for scroll animations
   useEffect(() => {
     const observerOptions = {
       threshold: 0.15,
@@ -131,6 +129,7 @@ const InvitationScreen = () => {
       reception2IntroRef.current,
       reception2TimeRef.current,
       galleryRef.current,
+      closingRef.current,                    // ← NEW
       ...galleryImagesRef.current
     ];
 
@@ -150,6 +149,7 @@ const InvitationScreen = () => {
     };
   }, []);
 
+  // Add to Google Calendar
   const addToGoogleCalendar = () => {
     const title = "Gautham & Sisira Wedding";
     const venue = "Manikkal Mana Kozhikode, Kerala";
@@ -173,6 +173,7 @@ const InvitationScreen = () => {
     window.open(venueAddressMapUrl, "_blank");
   };
 
+  // Smooth scroll helper for the indicator
   const scrollToContent = () => {
     const target = document.getElementById('invitation-content');
     if (target) {
@@ -221,7 +222,7 @@ const InvitationScreen = () => {
               }}
             >
               <h1 className="font-['Great_Vibes'] text-[#FBF8F2] text-6xl leading-none drop-shadow-lg">
-                Gautham &amp; Sisira
+             Sisira &amp; Gautham
               </h1>
               <p className="mt-2 font-['Cormorant_Garamond'] text-[#FBF8F2] uppercase tracking-[0.3em] text-xl drop-shadow-md">
                 WE ARE GETTING MARRIED
@@ -494,6 +495,49 @@ const InvitationScreen = () => {
                   </div>
                 ))}
               </div>
+            </section>
+
+            {/* ---------- CLOSING / THANK YOU ---------- */}
+            <section
+              ref={closingRef}
+              className="w-full pt-24 px-8 text-center"
+            >
+              {/* decorative divider */}
+              <div className="flex items-center justify-center gap-2.5 mb-8">
+                <span className="h-px w-[46px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                <span className="w-1.5 h-1.5 bg-[#D4AF37] rotate-45" />
+                <span className="h-px w-[46px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+              </div>
+
+              {/* main message */}
+              <h2 className="font-['Great_Vibes'] text-4xl text-[#2E2A28] leading-tight">
+                With the love of
+              </h2>
+              <h2 className="font-['Great_Vibes'] text-4xl text-[#A9812C] leading-tight mt-1">
+                friends &amp; family
+              </h2>
+
+              <p className="font-['Cormorant_Garamond'] italic text-[18px] text-[#8C8478] mt-6 tracking-[0.04em] max-w-[440px] mx-auto leading-8">
+                Your presence, blessings, and love mean the world to us.
+                Thank you for being part of our forever.
+              </p>
+
+              {/* names again, small & elegant */}
+              <p className="font-['Poppins'] uppercase tracking-[0.35em] text-[11px] text-[#B7B0A3] mt-10">
+             Sisira &amp; Gautham
+              </p>
+
+              {/* bottom decorative divider */}
+              <div className="flex items-center justify-center gap-2.5 mt-6">
+                <span className="h-px w-[30px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                <span className="w-1 h-1 bg-[#D4AF37] rotate-45" />
+                <span className="h-px w-[30px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+              </div>
+
+              {/* soft footer line */}
+              <p className="font-['Cormorant_Garamond'] uppercase tracking-[0.25em] text-[12px] text-[#B7B0A3] mt-12">
+                With Love — Est. Forever
+              </p>
             </section>
           </div>
         </main>
