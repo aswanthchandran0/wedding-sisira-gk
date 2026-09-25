@@ -3,7 +3,6 @@ import DressCodeImage from "../assets/dressCode.png";
 import { useEffect, useState, useRef } from "react";
 import { CalendarDays, MapPin, ChevronDown, Heart } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { track } from '@vercel/analytics'; // ✅ ADDED
 import song from '../assets/song.mp3';
 
 import gallary1 from '../assets/gallary1.jpeg';
@@ -27,9 +26,13 @@ const InvitationScreen = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // ✅ Track that the invitation page was viewed
+  // ✅ Track that the invitation page was viewed (Google Analytics)
   useEffect(() => {
-    track('Invitation Screen Viewed');
+    if (window.gtag) {
+      window.gtag('event', 'invitation_screen_viewed', {
+        event_category: 'engagement',
+      });
+    }
   }, []);
 
   const [timeLeft, setTimeLeft] = useState({
@@ -159,11 +162,13 @@ const InvitationScreen = () => {
 
   // Add to Google Calendar
   const addToGoogleCalendar = () => {
-    // ✅ Track the calendar click
-    track('Schedule Reminder Clicked', {
-      event: 'Wedding Ceremony',
-      timestamp: new Date().toISOString()
-    });
+    // ✅ Track the calendar click with Google Analytics
+    if (window.gtag) {
+      window.gtag('event', 'calendar_click', {
+        event_category: 'engagement',
+        event_label: 'Wedding Ceremony',
+      });
+    }
 
     const title = "Gautham & Sisira Wedding";
     const venue = "Manikkal Mana Kozhikode, Kerala";
@@ -172,7 +177,10 @@ const InvitationScreen = () => {
 
     const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&location=${encodeURIComponent(venue)}&details=${encodeURIComponent("Join us in celebrating our special day!")}`;
 
-    window.open(googleCalendarUrl, '_blank');
+    setTimeout(() => {
+      window.open(googleCalendarUrl, '_blank');
+    }, 200);
+
     setIsClicked(true);
     setTimeout(() => setIsClicked(false), 300);
   };
@@ -180,55 +188,69 @@ const InvitationScreen = () => {
   // ---- Location helpers ----
   const viewLocation = () => {
     // ✅ Track ceremony location click
-    track('Location Clicked', {
-      event: 'Ceremony - Manikkal Mana',
-      timestamp: new Date().toISOString()
-    });
+    if (window.gtag) {
+      window.gtag('event', 'location_click', {
+        event_category: 'engagement',
+        event_label: 'Ceremony - Manikkal Mana',
+      });
+    }
 
     const venueAddressMapUrl = 'https://www.google.com/maps/place/Manikkal+Mana/@11.19007,75.8559693,51m/data=!3m1!1e3!4m20!1m10!3m9!1s0x3ba65bbe6ea4f613:0x26795632dc1c0663!2sManikkal+Mana!5m2!4m1!1i2!8m2!3d11.1900312!4d75.8560102!16s%2Fg%2F11rx6v_yzq!3m8!1s0x3ba65bbe6ea4f613:0x26795632dc1c0663!5m2!4m1!1i2!8m2!3d11.1900312!4d75.8560102!16s%2Fg%2F11rx6v_yzq?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D';
-    window.open(venueAddressMapUrl, "_blank");
+    setTimeout(() => {
+      window.open(venueAddressMapUrl, "_blank");
+    }, 200);
   };
 
   const ReceptionViewLocation = () => {
     // ✅ Track reception 1 location click
-    track('Location Clicked', {
-      event: 'Reception 1 - Maniyattu Auditorium',
-      timestamp: new Date().toISOString()
-    });
+    if (window.gtag) {
+      window.gtag('event', 'location_click', {
+        event_category: 'engagement',
+        event_label: 'Reception 1 - Maniyattu Auditorium',
+      });
+    }
 
     const venueAddressMapUrl = 'https://www.google.com/maps/place/Maniyattu+Auditorium/@9.3638716,76.6600456,859m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3b063df9ae8268c7:0xa42144519c40e70e!8m2!3d9.3638716!4d76.6626205!16s%2Fg%2F11swhjhdcr?entry=ttu&g_ep=EgoyMDI2MDkxNi4wIKXMDSoASAFQAw%3D%3D';
-    window.open(venueAddressMapUrl, "_blank");
+    setTimeout(() => {
+      window.open(venueAddressMapUrl, "_blank");
+    }, 200);
   };
 
   const ReceptionViewLocation2 = () => {
     // ✅ Track reception 2 location click
-    track('Location Clicked', {
-      event: 'Reception 2 - Bride\'s Residence',
-      timestamp: new Date().toISOString()
-    });
+    if (window.gtag) {
+      window.gtag('event', 'location_click', {
+        event_category: 'engagement',
+        event_label: "Reception 2 - Bride's Residence",
+      });
+    }
 
     const venueAddressMapUrl = 'https://www.google.com/maps/place/11%C2%B048\'40.1%22N+75%C2%B035\'03.7%22E/@11.8111324,75.5817986,852m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d11.8111324!4d75.5843735?hl=en&entry=ttu&g_ep=EgoyMDI2MDkyMi4wIKXMDSoASAFQAw%3D%3D';
-    window.open(venueAddressMapUrl, "_blank");
+    setTimeout(() => {
+      window.open(venueAddressMapUrl, "_blank");
+    }, 200);
   };
 
-  // ✅ Portfolio / brand link WITH tracking (fixed timing)
-const openPortfolio = () => {
-  // Track the portfolio click FIRST
-  track('Portfolio Click', {
-    source: 'Invitation Screen Footer',
-    designer: 'Aswanth',
-    timestamp: new Date().toISOString()
-  });
+  // ✅ Portfolio / brand link WITH Google Analytics tracking
+  const openPortfolio = () => {
+    // Send a custom event to Google Analytics
+    if (window.gtag) {
+      window.gtag('event', 'portfolio_click', {
+        event_category: 'engagement',
+        event_label: 'Aswanth Portfolio',
+        value: 1
+      });
+    }
 
-  // Then open after a small delay so the tracking request completes
-  setTimeout(() => {
-    window.open(
-      'https://portfolio-two-peach-e6w9ybzsot.vercel.app/',
-      '_blank',
-      'noopener,noreferrer'
-    );
-  }, 300);
-};
+    // Open the portfolio link after a small delay
+    setTimeout(() => {
+      window.open(
+        'https://portfolio-two-peach-e6w9ybzsot.vercel.app/',
+        '_blank',
+        'noopener,noreferrer'
+      );
+    }, 200);
+  };
 
   // Smooth scroll helper for the indicator
   const scrollToContent = () => {
