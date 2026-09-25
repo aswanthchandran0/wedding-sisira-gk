@@ -211,17 +211,24 @@ const InvitationScreen = () => {
     window.open(venueAddressMapUrl, "_blank");
   };
 
-  // ✅ Portfolio / brand link WITH tracking
-  const openPortfolio = () => {
-    // Track the portfolio click in Vercel Analytics
-    track('Portfolio Click', {
-      source: 'Invitation Screen Footer',
-      designer: 'Aswanth',
-      timestamp: new Date().toISOString()
-    });
+  // ✅ Portfolio / brand link WITH tracking (fixed timing)
+const openPortfolio = () => {
+  // Track the portfolio click FIRST
+  track('Portfolio Click', {
+    source: 'Invitation Screen Footer',
+    designer: 'Aswanth',
+    timestamp: new Date().toISOString()
+  });
 
-    window.open('https://portfolio-two-peach-e6w9ybzsot.vercel.app/', '_blank', 'noopener,noreferrer');
-  };
+  // Then open after a small delay so the tracking request completes
+  setTimeout(() => {
+    window.open(
+      'https://portfolio-two-peach-e6w9ybzsot.vercel.app/',
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }, 300);
+};
 
   // Smooth scroll helper for the indicator
   const scrollToContent = () => {
