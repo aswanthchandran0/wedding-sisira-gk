@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import song from '../assets/song.mp3'; // Adjust the path as needed
-import coverPageImage from '../assets/coverPageImage.jpeg'; // Adjust the path as needed
+import { track } from '@vercel/analytics';
+import song from '../assets/song.mp3';
+import coverPageImage from '../assets/coverPageImage.jpeg';
 
 const WeddingInvitation = () => {
   const ctaRef = useRef(null);
@@ -12,12 +13,23 @@ const WeddingInvitation = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Track that the cover page was viewed
+  useEffect(() => {
+    track('Cover Screen Viewed');
+  }, []);
+
   useEffect(() => {
     const handleClick = (e) => {
       e.preventDefault();
       const target = e.currentTarget;
       target.style.transform = 'scale(0.97)';
       setTimeout(() => { target.style.transform = ''; }, 180);
+
+      // ✅ Track the "Open Invitation" click in Vercel Analytics
+      track('Open Invitation Clicked', {
+        source: 'Cover Screen',
+        timestamp: new Date().toISOString()
+      });
 
       // Play the song
       if (audioRef.current) {
@@ -26,8 +38,8 @@ const WeddingInvitation = () => {
         });
       }
 
-      // Navigate to invitation page
-      navigate('/invitation');
+      // Navigate to invitation page with state
+      navigate('/invitation', { state: { fromCover: true } });
     };
 
     const cta = ctaRef.current;

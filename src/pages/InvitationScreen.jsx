@@ -1,8 +1,9 @@
 import HeroImage from "../assets/hero.jpeg";
 import DressCodeImage from "../assets/dressCode.png";
 import { useEffect, useState, useRef } from "react";
-import { CalendarDays, MapPin, ChevronDown } from 'lucide-react';
+import { CalendarDays, MapPin, ChevronDown, Heart } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { track } from '@vercel/analytics'; // ✅ ADDED
 import song from '../assets/song.mp3';
 
 import gallary1 from '../assets/gallary1.jpeg';
@@ -26,6 +27,11 @@ const InvitationScreen = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // ✅ Track that the invitation page was viewed
+  useEffect(() => {
+    track('Invitation Screen Viewed');
+  }, []);
+
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -46,9 +52,10 @@ const InvitationScreen = () => {
   const reception1DateRef = useRef(null);
   const reception1TimeRef = useRef(null);
   const reception2IntroRef = useRef(null);
+  const reception2DateRef = useRef(null);
   const reception2TimeRef = useRef(null);
   const galleryRef = useRef(null);
-  const closingRef = useRef(null);           // ← NEW
+  const closingRef = useRef(null);
   const galleryImagesRef = useRef([]);
 
   // Auto-play audio when component mounts
@@ -127,9 +134,10 @@ const InvitationScreen = () => {
       reception1DateRef.current,
       reception1TimeRef.current,
       reception2IntroRef.current,
+      reception2DateRef.current,
       reception2TimeRef.current,
       galleryRef.current,
-      closingRef.current,                    // ← NEW
+      closingRef.current,
       ...galleryImagesRef.current
     ];
 
@@ -151,6 +159,12 @@ const InvitationScreen = () => {
 
   // Add to Google Calendar
   const addToGoogleCalendar = () => {
+    // ✅ Track the calendar click
+    track('Schedule Reminder Clicked', {
+      event: 'Wedding Ceremony',
+      timestamp: new Date().toISOString()
+    });
+
     const title = "Gautham & Sisira Wedding";
     const venue = "Manikkal Mana Kozhikode, Kerala";
     const startDate = "20261206T100000";
@@ -163,14 +177,50 @@ const InvitationScreen = () => {
     setTimeout(() => setIsClicked(false), 300);
   };
 
+  // ---- Location helpers ----
   const viewLocation = () => {
+    // ✅ Track ceremony location click
+    track('Location Clicked', {
+      event: 'Ceremony - Manikkal Mana',
+      timestamp: new Date().toISOString()
+    });
+
     const venueAddressMapUrl = 'https://www.google.com/maps/place/Manikkal+Mana/@11.19007,75.8559693,51m/data=!3m1!1e3!4m20!1m10!3m9!1s0x3ba65bbe6ea4f613:0x26795632dc1c0663!2sManikkal+Mana!5m2!4m1!1i2!8m2!3d11.1900312!4d75.8560102!16s%2Fg%2F11rx6v_yzq!3m8!1s0x3ba65bbe6ea4f613:0x26795632dc1c0663!5m2!4m1!1i2!8m2!3d11.1900312!4d75.8560102!16s%2Fg%2F11rx6v_yzq?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D';
     window.open(venueAddressMapUrl, "_blank");
   };
 
   const ReceptionViewLocation = () => {
+    // ✅ Track reception 1 location click
+    track('Location Clicked', {
+      event: 'Reception 1 - Maniyattu Auditorium',
+      timestamp: new Date().toISOString()
+    });
+
     const venueAddressMapUrl = 'https://www.google.com/maps/place/Maniyattu+Auditorium/@9.3638716,76.6600456,859m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3b063df9ae8268c7:0xa42144519c40e70e!8m2!3d9.3638716!4d76.6626205!16s%2Fg%2F11swhjhdcr?entry=ttu&g_ep=EgoyMDI2MDkxNi4wIKXMDSoASAFQAw%3D%3D';
     window.open(venueAddressMapUrl, "_blank");
+  };
+
+  const ReceptionViewLocation2 = () => {
+    // ✅ Track reception 2 location click
+    track('Location Clicked', {
+      event: 'Reception 2 - Bride\'s Residence',
+      timestamp: new Date().toISOString()
+    });
+
+    const venueAddressMapUrl = 'https://www.google.com/maps/place/11%C2%B048\'40.1%22N+75%C2%B035\'03.7%22E/@11.8111324,75.5817986,852m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d11.8111324!4d75.5843735?hl=en&entry=ttu&g_ep=EgoyMDI2MDkyMi4wIKXMDSoASAFQAw%3D%3D';
+    window.open(venueAddressMapUrl, "_blank");
+  };
+
+  // ✅ Portfolio / brand link WITH tracking
+  const openPortfolio = () => {
+    // Track the portfolio click in Vercel Analytics
+    track('Portfolio Click', {
+      source: 'Invitation Screen Footer',
+      designer: 'Aswanth',
+      timestamp: new Date().toISOString()
+    });
+
+    window.open('https://portfolio-two-peach-e6w9ybzsot.vercel.app/', '_blank', 'noopener,noreferrer');
   };
 
   // Smooth scroll helper for the indicator
@@ -203,7 +253,6 @@ const InvitationScreen = () => {
               className="w-full h-full object-cover"
             />
 
-            {/* Gradient overlay for text readability */}
             <div
               className="absolute inset-0"
               style={{
@@ -222,14 +271,14 @@ const InvitationScreen = () => {
               }}
             >
               <h1 className="font-['Great_Vibes'] text-[#FBF8F2] text-6xl leading-none drop-shadow-lg">
-             Sisira &amp; Gautham
+                Sisira &amp; Gautham
               </h1>
               <p className="mt-2 font-['Cormorant_Garamond'] text-[#FBF8F2] uppercase tracking-[0.3em] text-xl drop-shadow-md">
                 WE ARE GETTING MARRIED
               </p>
             </div>
 
-            {/* ---------- SCROLL DOWN INDICATOR (BLACK) ---------- */}
+            {/* ---------- SCROLL DOWN INDICATOR ---------- */}
             <button
               onClick={scrollToContent}
               aria-label="Scroll down to see invitation details"
@@ -269,7 +318,6 @@ const InvitationScreen = () => {
                 />
               </span>
 
-              {/* subtle pulsing ring (black) */}
               <span
                 className="absolute bottom-0 w-9 h-9 rounded-full pointer-events-none"
                 style={{
@@ -279,7 +327,6 @@ const InvitationScreen = () => {
               />
             </button>
 
-            {/* Bottom fade into page */}
             <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-[#FBF8F2]/50 to-[#FBF8F2] pointer-events-none" />
           </div>
 
@@ -432,6 +479,13 @@ const InvitationScreen = () => {
                 6:00 PM - 10:00 PM
               </p>
 
+              <h2 className="font-['poppins'] font-bold text-xl pt-4 text-[#2E2A28] leading-none">
+                Location
+              </h2>
+              <p className="font-['JetBrains'] text-[17px] leading-8 text-[#6B6B6B]">
+                Maniyattu Auditorium
+              </p>
+
               <div className="pt-4">
                 <button
                   onClick={ReceptionViewLocation}
@@ -453,12 +507,24 @@ const InvitationScreen = () => {
               </p>
             </div>
 
+            <div ref={reception2DateRef} className="flex flex-col justify-center pt-24">
+              <h3 className="font-['Cormorant_Garamond'] uppercase tracking-[0.12em] text-2xl text-[#4A4A4A]">
+                DECEMBER
+              </h3>
+              <h1 className="font-['Cormorant_Garamond'] text-8xl font-medium leading-none text-[#4A4A4A]">
+                13
+              </h1>
+              <h3 className="font-['Cormorant_Garamond'] tracking-[0.35em] text-2xl text-[#4A4A4A]">
+                2026
+              </h3>
+            </div>
+
             <div ref={reception2TimeRef} className="w-full pt-8 text-start px-8">
               <h2 className="font-['poppins'] font-bold text-xl text-[#2E2A28] leading-none">
                 Time
               </h2>
               <p className="font-['JetBrains'] text-[17px] leading-8 text-[#6B6B6B]">
-                4:00 PM - 8:00 PM
+                4:00 PM - 9:00 PM
               </p>
 
               <h2 className="font-['poppins'] font-bold text-xl pt-4 text-[#2E2A28] leading-none">
@@ -467,6 +533,16 @@ const InvitationScreen = () => {
               <p className="font-['JetBrains'] text-[17px] leading-8 text-[#6B6B6B]">
                 Bride's Residence
               </p>
+
+              <div className="pt-4">
+                <button
+                  onClick={ReceptionViewLocation2}
+                  className="flex flex-row items-center gap-2 py-3 px-6 sm:w-fit rounded-lg shadow-md bg-[#A9812C] text-white hover:bg-[#8F6E25] hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300"
+                >
+                  <MapPin className="size-4" />
+                  <p className="font-['Poppins'] text-[15px] font-medium">View Location</p>
+                </button>
+              </div>
             </div>
 
             {/* Gallery */}
@@ -502,14 +578,12 @@ const InvitationScreen = () => {
               ref={closingRef}
               className="w-full pt-24 px-8 text-center"
             >
-              {/* decorative divider */}
               <div className="flex items-center justify-center gap-2.5 mb-8">
                 <span className="h-px w-[46px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                 <span className="w-1.5 h-1.5 bg-[#D4AF37] rotate-45" />
                 <span className="h-px w-[46px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
               </div>
 
-              {/* main message */}
               <h2 className="font-['Great_Vibes'] text-4xl text-[#2E2A28] leading-tight">
                 With the love of
               </h2>
@@ -522,22 +596,51 @@ const InvitationScreen = () => {
                 Thank you for being part of our forever.
               </p>
 
-              {/* names again, small & elegant */}
               <p className="font-['Poppins'] uppercase tracking-[0.35em] text-[11px] text-[#B7B0A3] mt-10">
-             Sisira &amp; Gautham
+                Sisira &amp; Gautham
               </p>
 
-              {/* bottom decorative divider */}
               <div className="flex items-center justify-center gap-2.5 mt-6">
                 <span className="h-px w-[30px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                 <span className="w-1 h-1 bg-[#D4AF37] rotate-45" />
                 <span className="h-px w-[30px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
               </div>
 
-              {/* soft footer line */}
               <p className="font-['Cormorant_Garamond'] uppercase tracking-[0.25em] text-[12px] text-[#B7B0A3] mt-12">
                 With Love — Est. Forever
               </p>
+
+              {/* ---------- BRAND / LOGO ---------- */}
+              <button
+                onClick={openPortfolio}
+                aria-label="Visit designer portfolio"
+                className="group mt-14 inline-flex flex-col items-center gap-3 cursor-pointer bg-transparent border-none focus:outline-none transition-all duration-500 hover:scale-105 active:scale-95"
+              >
+                {/* logo mark */}
+                <span className="relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-500 group-hover:rotate-12"
+                  style={{
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #F7E7A9 100%)',
+                    boxShadow: '0 6px 20px -6px rgba(212,175,55,0.6), inset 0 1px 1px rgba(255,255,255,0.7)'
+                  }}
+                >
+                  <Heart
+                    className="w-5 h-5 transition-transform duration-500 group-hover:scale-110"
+                    style={{ color: '#4a3a12' }}
+                    fill="#4a3a12"
+                  />
+                </span>
+
+                {/* brand text */}
+                <span className="flex flex-col items-center leading-tight">
+                  <span className="font-['Cormorant_Garamond'] uppercase tracking-[0.3em] text-[11px] text-[#B7B0A3] transition-colors duration-500 group-hover:text-[#A9812C]">
+                    Designed &amp; Developed by
+                  </span>
+                  <span className="font-['Playfair_Display'] font-semibold text-[15px] text-[#A9812C] tracking-[0.08em] mt-0.5 transition-all duration-500 group-hover:tracking-[0.14em]">
+                    Aswanth
+                  </span>
+                  <span className="h-px w-0 group-hover:w-full bg-[#D4AF37] transition-all duration-500 mt-1" />
+                </span>
+              </button>
             </section>
           </div>
         </main>
