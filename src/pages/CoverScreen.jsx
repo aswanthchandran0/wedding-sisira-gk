@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import song from '../assets/song.mp3';
 import coverPageImage from '../assets/coverPageImage.jpeg';
+import MusicController from '../components/MusicController'; // ✅ ADDED
 
 const WeddingInvitation = () => {
   const ctaRef = useRef(null);
@@ -66,8 +67,11 @@ const WeddingInvitation = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#2E2A28] font-sans overflow-x-hidden antialiased">
-      {/* Audio element */}
-      <audio ref={audioRef} src={song} preload="auto" />
+      {/* ✅ Audio element — added loop so music never stops mid-scroll */}
+      <audio ref={audioRef} src={song} preload="auto" loop />
+
+      {/* ✅ Music controller — appears only after music starts playing */}
+      <MusicController audioRef={audioRef} />
 
       {/* HERO SECTION */}
       <section

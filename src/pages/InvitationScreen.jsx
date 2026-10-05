@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { CalendarDays, MapPin, ChevronDown, Heart } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import song from '../assets/song.mp3';
+import MusicController from '../components/MusicController'; // ✅ ADDED
 
 import gallary1 from '../assets/gallary1.jpeg';
 import gallary2 from '../assets/gallary2.png';
@@ -162,7 +163,6 @@ const InvitationScreen = () => {
 
   // Add to Google Calendar
   const addToGoogleCalendar = () => {
-    // ✅ Track the calendar click with Google Analytics
     if (window.gtag) {
       window.gtag('event', 'calendar_click', {
         event_category: 'engagement',
@@ -187,7 +187,6 @@ const InvitationScreen = () => {
 
   // ---- Location helpers ----
   const viewLocation = () => {
-    // ✅ Track ceremony location click
     if (window.gtag) {
       window.gtag('event', 'location_click', {
         event_category: 'engagement',
@@ -202,7 +201,6 @@ const InvitationScreen = () => {
   };
 
   const ReceptionViewLocation = () => {
-    // ✅ Track reception 1 location click
     if (window.gtag) {
       window.gtag('event', 'location_click', {
         event_category: 'engagement',
@@ -217,7 +215,6 @@ const InvitationScreen = () => {
   };
 
   const ReceptionViewLocation2 = () => {
-    // ✅ Track reception 2 location click
     if (window.gtag) {
       window.gtag('event', 'location_click', {
         event_category: 'engagement',
@@ -233,19 +230,17 @@ const InvitationScreen = () => {
 
   // ✅ Portfolio / brand link WITH Google Analytics tracking
   const openPortfolio = () => {
-    // Send a custom event to Google Analytics
     if (window.gtag) {
       window.gtag('event', 'portfolio_click', {
         event_category: 'engagement',
-        event_label: 'Aswanth Portfolio',
+        event_label: 'Everloom Portfolio',
         value: 1
       });
     }
 
-    // Open the portfolio link after a small delay
     setTimeout(() => {
       window.open(
-        'https://portfolio-two-peach-e6w9ybzsot.vercel.app/',
+        'https://everloom-ruby.vercel.app/',
         '_blank',
         'noopener,noreferrer'
       );
@@ -263,7 +258,11 @@ const InvitationScreen = () => {
   return (
     <>
       <div className="w-full min-h-screen bg-[#FBF8F2] overflow-x-hidden">
-        <audio ref={audioRef} src={song} preload="auto" />
+        {/* ✅ Audio element — added loop */}
+        <audio ref={audioRef} src={song} preload="auto" loop />
+
+        {/* ✅ Music controller — appears after music starts playing */}
+        <MusicController audioRef={audioRef} />
 
         <main className="max-w-[620px] mx-auto lg:px-7 pb-[120px] text-center">
           {/* ---------- HERO IMAGE ---------- */}
@@ -645,7 +644,6 @@ const InvitationScreen = () => {
                 aria-label="Visit designer portfolio"
                 className="group mt-14 inline-flex flex-col items-center gap-3 cursor-pointer bg-transparent border-none focus:outline-none transition-all duration-500 hover:scale-105 active:scale-95"
               >
-                {/* logo mark */}
                 <span className="relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-500 group-hover:rotate-12"
                   style={{
                     background: 'linear-gradient(135deg, #D4AF37 0%, #F7E7A9 100%)',
@@ -659,13 +657,12 @@ const InvitationScreen = () => {
                   />
                 </span>
 
-                {/* brand text */}
                 <span className="flex flex-col items-center leading-tight">
                   <span className="font-['Cormorant_Garamond'] uppercase tracking-[0.3em] text-[11px] text-[#B7B0A3] transition-colors duration-500 group-hover:text-[#A9812C]">
                     Designed &amp; Developed by
                   </span>
                   <span className="font-['Playfair_Display'] font-semibold text-[15px] text-[#A9812C] tracking-[0.08em] mt-0.5 transition-all duration-500 group-hover:tracking-[0.14em]">
-                    Aswanth
+                    Everloom
                   </span>
                   <span className="h-px w-0 group-hover:w-full bg-[#D4AF37] transition-all duration-500 mt-1" />
                 </span>
